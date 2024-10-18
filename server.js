@@ -51,7 +51,7 @@ app.post("/create-note", (req, res) => {
     };
 	
 	totalSize += noteSize;
-	console.log(`occupying ${totalSize} bytes of memory`);
+	//console.log(`occupying ${totalSize} bytes of memory`);
 
     // construct the link, partially, rest is handled on clientside
     const noteLink = `https://notes.sebbe.com/${noteId}`; 
