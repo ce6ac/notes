@@ -54,7 +54,7 @@ app.post("/create-note", (req, res) => {
 	console.log(`occupying ${totalSize} bytes of memory`);
 
     // construct the link, partially, rest is handled on clientside
-    const noteLink = `http://localhost:${PORT}/${noteId}`; 
+    const noteLink = `https://notes.sebbe.com/${noteId}`; 
     res.json({ noteLink });
 });
 
@@ -117,6 +117,6 @@ app.use((err, req, res, next) => {
 });
 
 // start the server
-app.listen(PORT, () => {
+app.listen(PORT, '127.0.0.1', () => {
     console.log(`running on port ${PORT}`);
 });
