@@ -37,17 +37,18 @@ async function encryptNote(noteContent) {
     const exportedKey = await window.crypto.subtle.exportKey("raw", key);
 
     // convert to hex
-    const keyHex = Array.from(new Uint8Array(exportedKey))
-        .map(b => b.toString(16).padStart(2, "0"))
-        .join("");
-    const ivHex = Array.from(iv)
+    const combinedArray = new Uint8Array(exportedKey.byteLength + iv.byteLength);
+    combinedArray.set(new Uint8Array(exportedKey), 0);
+    combinedArray.set(iv, exportedKey.byteLength);
+
+    // Convert combined byte array to hex
+    const combinedHex = Array.from(combinedArray)
         .map(b => b.toString(16).padStart(2, "0"))
         .join("");
 
     return {
         encryptedNote: encryptedBase64,
-        keyHex: keyHex,
-        ivHex: ivHex,
+        combinedHex: combinedHex, // Return the combined hex
     };
 }
 
@@ -80,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			return;
 		}
 
-		const { encryptedNote, keyHex, ivHex } = result;
+		const { encryptedNote, combinedHex  } = result;
 		const noteSize = getByteLength(encryptedNote);
 		if (noteSize > maxIndividualSize) {
             // i dont think we'll reach this due to previous checks?
@@ -100,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             const data = await response.json();
-            const noteLink = `${data.noteLink}#${keyHex}#${ivHex}`;
+            const noteLink = `${data.noteLink}#${combinedHex}`;
             noteInput.style.display = "none";
 			noteInput.value = "";
             noteControls.innerHTML = `

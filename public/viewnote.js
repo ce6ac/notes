@@ -1,4 +1,11 @@
-async function decryptNote(encryptedNote, keyHex, ivHex) {
+async function decryptNote(encryptedNote, combinedHex) {
+    // define lengths of the keys
+    const keyLength = 32;
+    const ivLength = 12;
+
+    const keyHex = combinedHex.slice(0, keyLength * 2); // hex = 2 bytes
+    const ivHex = combinedHex.slice(keyLength * 2, (keyLength + ivLength) * 2);
+
     // get key from hex
     const keyBuffer = new Uint8Array(keyHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
     const key = await window.crypto.subtle.importKey(
@@ -30,26 +37,26 @@ async function decryptNote(encryptedNote, keyHex, ivHex) {
 document.addEventListener("DOMContentLoaded", async () => {
     const hash = window.location.hash.substring(1);
     const noteId = window.noteId; // global
-    const [keyBase64, ivBase64] = hash.split("#");
+    const combinedHex = hash.split("#")[0];
 	
     document.getElementById("view-note-button").onclick = async () => {
         const noteContentElement = document.getElementById("note-content");
         const viewNoteButton = document.getElementById("view-note-button");
 
-        if (noteId && keyBase64 && ivBase64) {
+        if (noteId && combinedHex) {
             try {
                 // get note content
                 const response = await fetch(`/get-note/${noteId}`);
                 const { encryptedNote } = await response.json();
 
                 // decrypt
-                const decryptedNote = await decryptNote(encryptedNote, keyBase64, ivBase64);
+                const decryptedNote = await decryptNote(encryptedNote, combinedHex);
 
                 // delete
                 await fetch(`/delete-note/${noteId}`, { method: "DELETE" });
 
                 // show note
-                noteContentElement.innerText = decryptedNote;
+                noteContentElement.innerHTML = decryptedNote;
                 noteContentElement.style.display = "block";
                 viewNoteButton.style.display = "none";
             } catch (error) {
