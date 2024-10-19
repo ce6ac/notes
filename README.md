@@ -6,8 +6,8 @@ it allows users to create and view notes with encryption implemented, ensuring t
 
 ### how it works
 all notes are encrypted and decrypted on the client-side, meaning the server only stores encrypted data.
-this functionality is maintained by first encrypting your input with aes-gcm and generating a key and iv (initializing vector) for it.
-the encrypted input is encoded into base64 to allow the server to store it as a string. this is also the string that is shown when clicking "proof".
+this functionality is maintained by generating a key, iv (initializing vector) and encrypting your input with aes-gcm.
+the encrypted input is encoded into base64 to allow the server to store it as a string. this is also the string that is shown when clicking the "proof" button.
 
 on the server the encrypted strings are stored as an array in memory, which means they are never saved to a filesystem, but instead the notes existance is fully within the hosts memory.
 
@@ -18,16 +18,15 @@ once the note content has been retreived from the server we're deleting the note
 ### storage inside memory
 since we're storing the encrypted data in memory it means it should never be written to a filesystem, however to make sure there is enough memory we're also storing the timestamp of when the note was created so that we can delete the oldest created note to ensure memory usage does not exceed the set limit.
 
-## requirements
-### node.js
-yes, it's node.js.
+## deployment
+### clone this repo
+```git clone https://github.com/ce6ac/notes.git```
 
 ### npm
-install following packages:
 ```npm install express body-parser crypto path fs```
 
 ### SSL
-(unless localhost)
+make sure the webserver you're running has an SSL cert and is accessible with https (otherwise crypto package will be angry iirc) (unless running on localhost ofc)
 
 
 
