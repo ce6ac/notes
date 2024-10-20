@@ -64,7 +64,7 @@ function getByteLength(str) {
 document.addEventListener("DOMContentLoaded", () => {
     const createNoteButton = document.getElementById("create-note-button");
     const noteInput = document.getElementById("note-input");
-	noteInput.placeholder += `\n(max encrypted size is ${maxIndividualSize} bytes)`;
+    noteInput.placeholder += `\n(max encrypted size is ${maxIndividualSize} bytes)`;
     const noteControls = document.getElementById("note-link-display");
     createNoteButton.addEventListener("click", async () => {
         const noteContent = noteInput.value;
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!result) {
             alert("could not encrypt note");
             return;
-		}
+        }
         
         const { encryptedNote, combinedHex  } = result;
         const noteSize = getByteLength(encryptedNote);
