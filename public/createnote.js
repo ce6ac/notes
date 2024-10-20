@@ -72,21 +72,20 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("cannot encrypt nothing...");
             return;
         }
-		
-		const result = await encryptNote(noteContent);
-
+        const result = await encryptNote(noteContent);
+        
         // something went wrong in encryption and returned 0
-		if (!result) {
+        if (!result) {
             alert("could not encrypt note");
-			return;
-		}
-
-		const { encryptedNote, combinedHex  } = result;
-		const noteSize = getByteLength(encryptedNote);
-		if (noteSize > maxIndividualSize) {
-            // i dont think we'll reach this due to previous checks?
             return;
 		}
+        
+        const { encryptedNote, combinedHex  } = result;
+        const noteSize = getByteLength(encryptedNote);
+        if (noteSize > maxIndividualSize) {
+            // i dont think we'll reach this due to previous checks?
+            return;
+        }
         try {
             const response = await fetch("/create-note", {
                 method: "POST",
@@ -103,15 +102,15 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await response.json();
             const noteLink = `${data.noteLink}#${combinedHex}`;
             noteInput.style.display = "none";
-			noteInput.value = "";
+            noteInput.value = "";
             noteControls.innerHTML = `
                 <input id="link-input" type="text" value="${noteLink}" readonly />
                 <button id="copy-link-button">copy</button>
-				<button id="view-raw-button">proof</button>
-				<button id="create-new-button">new</button>
+                <button id="view-raw-button">proof</button>
+                <button id="create-new-button">new</button>
             `;
-			const h1Title = document.getElementById("title");
-			h1Title.innerHTML = "link to note";
+            const h1Title = document.getElementById("title");
+            h1Title.innerHTML = "link to note";
 			
             const copyButton = document.getElementById("copy-link-button");
             copyButton.onclick = () => {
@@ -120,17 +119,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.execCommand("copy");
             };
 			
-			const viewRawButton = document.getElementById("view-raw-button");
+            const viewRawButton = document.getElementById("view-raw-button");
             viewRawButton.onclick = () => {
-				h1Title.innerHTML = "raw data sent to server";
-				noteInput.style.display = "inline-block";
-				noteInput.value = result.encryptedNote;
-				viewRawButton.style.display = "none";
+                h1Title.innerHTML = "raw data sent to server";
+                noteInput.style.display = "inline-block";
+                noteInput.value = result.encryptedNote;
+                viewRawButton.style.display = "none";
             };
 
-			const newButton = document.getElementById("create-new-button");
+            const newButton = document.getElementById("create-new-button");
             newButton.onclick = () => {
-				window.location.href = "/";
+                window.location.href = "/";
             };
 			
         } catch (error) {

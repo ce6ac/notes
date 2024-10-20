@@ -47,11 +47,10 @@ app.post("/create-note", (req, res) => {
     // store in memory
     notes[noteId] = {
         encryptedNote,
-		createdAt: Date.now() // timestamp for sorting
+        createdAt: Date.now() // timestamp for sorting
     };
 	
 	totalSize += noteSize;
-	//console.log(`occupying ${totalSize} bytes of memory`);
 
     // construct the link, partially, rest is handled on clientside
     const noteLink = `https://notes.sebbe.com/${noteId}`; 
@@ -90,24 +89,15 @@ app.get("/get-note/:noteId", (req, res) => {
     }
 
     // get the note from memory
-    const { encryptedNote }	= notes[noteId];
-
-    // send back the note only
-    res.json({ encryptedNote });
-});
-
-app.delete("/delete-note/:noteId", (req, res) => {
-    const noteId = req.params.noteId;
-
-    if (!notes[noteId]) {
-        return res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
-    }
+    const { encryptedNote } = notes[noteId];
 
     // free up memory
     const noteSize = Buffer.byteLength(notes[noteId].encryptedNote);
     totalSize -= noteSize; // adjust the total size
     delete notes[noteId];
-    res.status(200).json({ message: "deleted" });
+
+    // send back the note only
+    res.json({ encryptedNote });
 });
 
 // global error handler

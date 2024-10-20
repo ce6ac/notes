@@ -52,9 +52,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 // decrypt
                 const decryptedNote = await decryptNote(encryptedNote, combinedHex);
 
-                // delete
-                await fetch(`/delete-note/${noteId}`, { method: "DELETE" });
-
                 // show note
                 noteContentElement.innerHTML = decryptedNote;
                 noteContentElement.style.display = "block";
