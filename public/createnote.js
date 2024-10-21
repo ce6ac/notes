@@ -100,6 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             const data = await response.json();
+            document.title = "notes - note created";
             const noteLink = `${data.noteLink}#${combinedHex}`;
             noteInput.style.display = "none";
             noteInput.value = "";
