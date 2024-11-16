@@ -120,6 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
         h1Title.innerHTML = "raw data sent to server";
         noteInput.style.display = "inline-block";
         noteInput.value = result.encryptedNote;
+        noteInput.setAttribute("readonly", true);
         viewRawButton.style.display = "none";
       };
 
