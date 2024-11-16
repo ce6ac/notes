@@ -62,13 +62,6 @@ textarea {
     max-height: 500px;
 }
 
-textarea[readonly] {
-    background-color: #2a2a2a;
-    border: 1px solid #444;
-    color: #e0e0e0;
-    resize: vertical;
-}
-
 textarea::placeholder {
     color: #888;
 }

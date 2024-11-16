@@ -94,9 +94,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const data = await response.json();
       document.title = "notes - note created";
+      const protocol = window.location.protocol;
       const domain = window.location.hostname;
       const port = window.location.port ? ":" + window.location.port : "";
-      const noteLink = `${domain}${port}/${data.noteId}#${combinedHex}`;
+      const noteLink = `${protocol}//${domain}${port}/${data.noteId}#${combinedHex}`;
       noteInput.style.display = "none";
       noteInput.value = "";
       noteControls.innerHTML = `
