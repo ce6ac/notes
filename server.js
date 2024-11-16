@@ -41,7 +41,7 @@ const generateUniqueId = () => {
 const rateLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 5,
-  message: { error: "Too many requests, please try again later." },
+  message: { error: "too many requests, please try again later." },
 });
 
 app.post("/create-note", rateLimiter, (req, res) => {
