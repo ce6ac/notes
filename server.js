@@ -67,7 +67,7 @@ app.post("/create-note", rateLimiter, (req, res) => {
 });
 
 app.get("/faq", (req, res) => {
-  res.status(200).sendFile(path.join(__dirname, "public", "faq.html"));
+  res.sendFile(path.join(__dirname, "public", "faq.html"));
 });
 
 // view note page
