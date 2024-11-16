@@ -23,7 +23,7 @@ since we're storing the encrypted data in memory it means it should never be wri
 ```git clone https://github.com/ce6ac/notes.git```
 
 ### npm
-```npm install express body-parser crypto path fs```
+```npm install express body-parser crypto path fs express-rate-limit```
 
 ### SSL
 make sure the webserver you're running has an SSL cert and is accessible with https (otherwise crypto package will be angry iirc) (unless running on localhost ofc)

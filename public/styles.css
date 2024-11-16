@@ -105,6 +105,40 @@ button:active {
     word-break: break-all;
 }
 
+.faq-item {
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.faq-item {
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.faq-q {
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #121212; /* Light background for questions */
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.faq-a {
+    display: none;
+    border-radius: 8px;
+    text-align: left;
+    padding: 10px;
+    background-color: #181818; /* Slightly lighter background for answers */
+    margin-top: 5px;
+}
+
+.faq-a.open {
+    display: block;
+    transition: all 0.3s ease-in-out;
+}
+
 footer {
     text-align: center;
     padding: 10px;
