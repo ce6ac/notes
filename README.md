@@ -19,11 +19,16 @@ once the note content has been retreived from the server we're deleting the note
 since we're storing the encrypted data in memory it means it should never be written to a filesystem, however to make sure there is enough memory we're also storing the timestamp of when the note was created so that we can delete the oldest created note to ensure memory usage does not exceed the set limit.
 
 ## deployment
-### clone this repo
-```git clone https://github.com/ce6ac/notes.git```
+```
+// clone repo
+git clone https://github.com/ce6ac/notes.git
 
-### npm
-```npm install express body-parser crypto path fs express-rate-limit```
+// install packages
+npm install express body-parser crypto path fs express-rate-limit
+
+// run server.js
+node server.js
+```
 
 ### SSL
 make sure the webserver you're running has an SSL cert and is accessible with https (otherwise crypto package will be angry iirc) (unless running on localhost ofc)
