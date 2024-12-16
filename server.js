@@ -79,27 +79,7 @@ app.get("/:noteId", (req, res) => {
     return res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
   }
 
-  // inject noteid into note.html
-  fs.readFile(
-    path.join(__dirname, "public", "note.html"),
-    "utf8",
-    (err, data) => {
-      if (err) {
-        console.error("error reading note.html:", err);
-        return res
-          .status(500)
-          .sendFile(path.join(__dirname, "public", "error.html")); // Send error page
-      }
-
-      // injection
-      const updatedData = data.replace(
-        /window\.noteId = "";/,
-        `window.noteId = "${noteId}";`
-      );
-
-      res.send(updatedData); // send back modified html
-    }
-  );
+  res.sendFile(path.join(__dirname, "public", "note.html"));
 });
 
 // get the actual note
@@ -122,9 +102,17 @@ app.get("/get-note/:noteId", (req, res) => {
   res.json({ encryptedNote });
 });
 
-// global error handler
+// error handler
 app.use((err, req, res, next) => {
+  if (err.type === "entity.too.large") {
+    console.error("payload too large:", err);
+    return res.status(413).json({
+      error: "payload too large",
+    });
+  }
+
   console.error("error:", err);
+  res.status(500).json({ error: "An unexpected error occurred." });
 });
 
 // start the server

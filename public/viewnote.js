@@ -40,9 +40,24 @@ async function decryptNote(encryptedNote, combinedHex) {
   return decoder.decode(decryptedData);
 }
 
+function displayError(message) {
+  const existingError = document.getElementById("error");
+  if (existingError) {
+    existingError.remove();
+  }
+
+  const errorDiv = document.createElement("div");
+  errorDiv.id = "error";
+  errorDiv.className = "error";
+  errorDiv.textContent = message;
+
+  const titleElement = document.getElementById("title");
+  titleElement.insertAdjacentElement("afterend", errorDiv);
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   const hash = window.location.hash.substring(1);
-  const noteId = window.noteId; // global
+  const noteId = window.location.pathname.split("/").pop();
   const combinedHex = hash.split("#")[0];
 
   document.getElementById("view-note-button").onclick = async () => {
@@ -64,14 +79,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         viewNoteButton.style.display = "none";
       } catch (error) {
         console.error("error:", error);
-        alert("failed to get note, bad keys or read already?");
+        displayError("failed to get note, bad keys or read already?");
         location.reload(false);
       }
     } else {
-      noteContentElement.innerText =
-        "this note does not exist, perhaps it's already been read?";
-      noteContentElement.style.display = "block";
-      viewNoteButton.style.display = "none";
+      displayError("this note does not exist, perhaps it's already been read?");
     }
   };
 });

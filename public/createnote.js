@@ -1,11 +1,3 @@
-function uint8ArrayToBase64(uint8Array) {
-  let binaryString = "";
-  for (let i = 0; i < uint8Array.length; i++) {
-    binaryString += String.fromCharCode(uint8Array[i]);
-  }
-  return btoa(binaryString);
-}
-
 async function encryptNote(noteContent) {
   // gen key
   const key = await window.crypto.subtle.generateKey(
@@ -33,7 +25,13 @@ async function encryptNote(noteContent) {
 
   // base64
   const encryptedArray = new Uint8Array(encryptedData);
-  const encryptedBase64 = uint8ArrayToBase64(encryptedArray);
+  const encryptedBase64 = (function (uint8Array) {
+    let binaryString = "";
+    for (let i = 0; i < uint8Array.length; i++) {
+      binaryString += String.fromCharCode(uint8Array[i]);
+    }
+    return btoa(binaryString);
+  })(encryptedArray);
 
   // get raw key
   const exportedKey = await window.crypto.subtle.exportKey("raw", key);
@@ -54,21 +52,48 @@ async function encryptNote(noteContent) {
   };
 }
 
+function displayError(message) {
+  const existingError = document.getElementById("error");
+  if (existingError) {
+    existingError.remove();
+  }
+
+  const errorDiv = document.createElement("div");
+  errorDiv.id = "error";
+  errorDiv.className = "error";
+  errorDiv.textContent = message;
+
+  const titleElement = document.getElementById("title");
+  titleElement.insertAdjacentElement("afterend", errorDiv);
+}
+
+function clearError() {
+  const existingError = document.getElementById("error");
+  if (existingError) {
+    existingError.remove();
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const createNoteButton = document.getElementById("create-note-button");
   const noteInput = document.getElementById("note-input");
   const noteControls = document.getElementById("note-link-display");
+
+  noteInput.addEventListener("focus", () => {
+    clearError();
+  });
+
   createNoteButton.addEventListener("click", async () => {
     const noteContent = noteInput.value;
     if (!noteContent) {
-      alert("cannot encrypt nothing...");
+      displayError("cannot encrypt nothing...");
       return;
     }
     const result = await encryptNote(noteContent);
 
     // something went wrong in encryption and returned 0
     if (!result) {
-      alert("could not encrypt note");
+      displayError("something went wrong.");
       return;
     }
 
@@ -85,8 +110,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        if (response.status === 400 && errorData.error === "max size reached") {
-          alert("note size limit reached, try shortening your note");
+        console.log(errorData);
+        if (
+          response.status === 413 ||
+          (response.status === 400 && errorData.error === "max size reached")
+        ) {
+          displayError("note size limit reached, try shortening your note.");
+          return;
         } else {
           throw new Error("unknown");
         }
@@ -101,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
       noteInput.style.display = "none";
       noteInput.value = "";
       noteControls.innerHTML = `
-                <input id="link-input" type="text" value="${noteLink}" readonly />
+                <input id="link" type="text" value="${noteLink}" readonly />
                 <button id="copy-link-button">copy</button>
                 <button id="view-raw-button">proof</button>
                 <button id="create-new-button">new</button>
@@ -111,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const copyButton = document.getElementById("copy-link-button");
       copyButton.onclick = () => {
-        const linkInput = document.getElementById("link-input");
+        const linkInput = document.getElementById("link");
         linkInput.select();
         document.execCommand("copy");
       };
@@ -131,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
       };
     } catch (error) {
       console.error(error);
-      alert("failed to create note. please try again.");
+      displayError("failed to create note. please try again.");
     }
   });
 });
