@@ -110,7 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.log(errorData);
         if (
           response.status === 413 ||
           (response.status === 400 && errorData.error === "max size reached")
