@@ -29,6 +29,11 @@ const manageNotesSize = (newNoteSize) => {
   }
 };
 
+// home
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "html", "index.html"));
+});
+
 // make sure noteid does not already exist
 const generateUniqueId = () => {
   let noteId;
@@ -67,7 +72,7 @@ app.post("/create-note", rateLimiter, (req, res) => {
 });
 
 app.get("/faq", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "faq.html"));
+  res.sendFile(path.join(__dirname, "html", "faq.html"));
 });
 
 // view note page
@@ -76,10 +81,10 @@ app.get("/:noteId", (req, res) => {
 
   // exists?
   if (!notes[noteId]) {
-    return res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
+    return res.status(404).sendFile(path.join(__dirname, "html", "404.html"));
   }
 
-  res.sendFile(path.join(__dirname, "public", "note.html"));
+  res.sendFile(path.join(__dirname, "html", "note.html"));
 });
 
 // get the actual note
@@ -87,7 +92,7 @@ app.get("/get-note/:noteId", (req, res) => {
   const noteId = req.params.noteId;
 
   if (!notes[noteId]) {
-    return res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
+    return res.status(404).sendFile(path.join(__dirname, "html", "404.html"));
   }
 
   // get the note from memory
