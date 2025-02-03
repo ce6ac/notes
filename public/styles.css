@@ -9,16 +9,21 @@ body, html {
     font-family: "courier new", Courier, monospace;
     background-color: #121212;
     color: #e0e0e0;
+}
+
+.container {
+    width: 100%;
     display: flex;
     align-items: center;
     flex-direction: column;
     min-height: 100vh;
+    padding-bottom: 70px;
 }
 
-.container {
+.box {
     background-color: #1e1e1e;
     padding: 30px;
-    margin-top: 10%;
+    margin-top: 5%;
     border-radius: 12px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8);
     width: 600px;
@@ -28,6 +33,7 @@ body, html {
 .error {
     display: block;
     width: 100%;
+    margin-bottom: 10px;
     padding: 6px;
     background-color: #800;
     text-decoration-color: #fff;
@@ -49,7 +55,7 @@ h2 {
 
 #link {
     width: 100%;
-    margin-top: 10px 0;
+    margin-bottom: 10px;
     background-color: #2a2a2a;
     color: #e0e0e0;
     border: 1px solid #444;
@@ -61,16 +67,15 @@ h2 {
 textarea {
     display: block;
     width: 100%;
+    margin-bottom: 10px;
     background-color: #2a2a2a;
     color: #e0e0e0;
     border: 1px solid #444;
     border-radius: 8px;
     padding: 12px;
-    margin: 10px 0;
     resize: vertical;
     height: 180px;
-    min-height: 50px;
-    max-height: 500px;
+    min-height: min-content;
 }
 
 textarea::placeholder {
@@ -86,7 +91,6 @@ button {
     padding: 12px 12px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.1s;
-    margin-top: 10px;
     min-width: 84px;
 }
 
@@ -102,18 +106,6 @@ button:active {
     transform: scale(0.98);
 }
 
-#note-link {
-    margin-top: 15px;
-    font-size: 1.1rem;
-    color: #81d4fa;
-    word-break: break-all;
-}
-
-.faq-item {
-    margin-bottom: 20px;
-    cursor: pointer;
-}
-
 .faq-item {
     margin-bottom: 20px;
     cursor: pointer;
@@ -123,7 +115,7 @@ button:active {
     font-weight: bold;
     border-radius: 8px;
     padding: 10px;
-    background-color: #121212; /* Light background for questions */
+    background-color: #121212;
     margin: 0;
     display: flex;
     justify-content: space-between;
@@ -134,13 +126,12 @@ button:active {
     border-radius: 8px;
     text-align: left;
     padding: 10px;
-    background-color: #181818; /* Slightly lighter background for answers */
+    background-color: #181818;
     margin-top: 5px;
 }
 
 .faq-a.open {
     display: block;
-    transition: all 0.3s ease-in-out;
 }
 
 footer {
@@ -171,23 +162,22 @@ footer a:hover {
     body {
         width: 100%;
     }
-	
-    .container {
+
+    .box {
+        padding: 15px;
         width: 95%;
-        padding: 10px;
-        margin-top: 5%;
     }
 
     h1 {
         font-size: 1.5rem;
     }
-    
+
     h2 {
         font-size: 1.2rem;
     }
 
     textarea {
-        height: 150px;
+        height: 250px;
     }
 
     button {
@@ -196,6 +186,7 @@ footer a:hover {
     }
 
     footer {
+        width: 100%;
         padding: 8px;
     }
 }
@@ -210,7 +201,7 @@ footer a:hover {
     }
 
     textarea {
-        height: 120px;
+        height: 200px;
     }
 
     button {
@@ -219,6 +210,7 @@ footer a:hover {
     }
 
     footer {
+        width: 100%;
         padding: 6px;
     }
 }

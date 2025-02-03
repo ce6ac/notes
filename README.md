@@ -1,8 +1,8 @@
 # notes
 
 ### why?
-notes is my git repo for notes.sebbe.com, a project i made because i was bored.
-it allows users to create and view notes with encryption implemented, ensuring that your input is securely stored and only accessible via generated links.
+notes is my git repo for [notes](https://notes.sebbe.com/), a project i made because i was bored.
+it allows users to create and view "burner" notes with encryption implemented, ensuring that your input is securely stored and only accessible via generated links.
 
 ### how it works
 all notes are encrypted and decrypted on the client-side, meaning the server only stores encrypted data.

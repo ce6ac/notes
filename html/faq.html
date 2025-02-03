@@ -8,55 +8,57 @@
    </head>
    <body>
       <div class="container">
-         <h1>faq</h1>
-         <div class="faq-item">
-            <div class="faq-q">
-               <span>do notes get encrypted?</span>
-               <span class="toggle">+</span>
+         <div class="box">
+            <h1>faq</h1>
+            <div class="faq-item">
+               <div class="faq-q">
+                  <span>do notes get encrypted?</span>
+                  <span class="toggle">+</span>
+               </div>
+               <div class="faq-a">
+                  <span>yes, by default the notes get encrypted and then encoded into base64 on the client side before they are sent to the server.</span>
+               </div>
             </div>
-            <div class="faq-a">
-               <span>yes, by default the notes get encrypted and then encoded into base64 on the client side before they are sent to the server.</span>
+            <div class="faq-item">
+               <div class="faq-q">
+                  <span>what happens to a note after it has been read?</span>
+                  <span class="toggle">+</span>
+               </div>
+               <div class="faq-a">
+                  <span>a note is deleted from memory upon fetching its contents, this means that even if your decryption keys are bad it will still be deleted.</span>
+               </div>
             </div>
+            <div class="faq-item">
+               <div class="faq-q">
+                  <span>where are notes stored?</span>
+                  <span class="toggle">+</span>
+               </div>
+               <div class="faq-a">
+                  <span>notes are stored in memory on the server, meaning the notes are never saved to a file system. however as memory size is limited, your note may get deleted to allow new notes in. oldest note gets deleted first.</span>
+               </div>
+            </div>
+            <div class="faq-item">
+               <div class="faq-q">
+                  <span>what data is processed?</span>
+                  <span class="toggle">+</span>
+               </div>
+               <div class="faq-a">
+                  <span>the only other parameter apart from the note contents (encrypted by default) is time of when note was created, this is to allow deletion of notes in memory allowing oldest note to be deleted first.</span>
+               </div>
+            </div>
+            <div class="faq-item">
+               <div class="faq-q">
+                  <span>are you using any trackers or loggers?</span>
+                  <span class="toggle">+</span>
+               </div>
+               <div class="faq-a">
+                  <span>no, your privacy is valued. no cloudflare proxying or anything like that.</span>
+               </div>
+            </div>
+            <a href="/">
+            <button id="home-button">go home</button>
+            </a>
          </div>
-         <div class="faq-item">
-            <div class="faq-q">
-               <span>what happens to a note after it has been read?</span>
-               <span class="toggle">+</span>
-            </div>
-            <div class="faq-a">
-               <span>a note is deleted from memory upon fetching its contents, this means that even if your decryption keys are bad it will still be deleted.</span>
-            </div>
-         </div>
-         <div class="faq-item">
-            <div class="faq-q">
-               <span>where are notes stored?</span>
-               <span class="toggle">+</span>
-            </div>
-            <div class="faq-a">
-               <span>notes are stored in memory on the server, meaning the notes are never saved to a file system. however as memory size is limited, your note may get deleted to allow new notes in. oldest note gets deleted first.</span>
-            </div>
-         </div>
-         <div class="faq-item">
-            <div class="faq-q">
-               <span>what data is processed?</span>
-               <span class="toggle">+</span>
-            </div>
-            <div class="faq-a">
-               <span>the only other parameter apart from the note contents (encrypted by default) is time of when note was created, this is to allow deletion of notes in memory allowing oldest note to be deleted first.</span>
-            </div>
-         </div>
-         <div class="faq-item">
-            <div class="faq-q">
-               <span>are you using any trackers or loggers?</span>
-               <span class="toggle">+</span>
-            </div>
-            <div class="faq-a">
-               <span>no, your privacy is valued. no cloudflare proxying or anything like that.</span>
-            </div>
-         </div>
-         <a href="/">
-         <button id="home-button">go home</button>
-         </a>
       </div>
       <footer>
          <p>notes | 

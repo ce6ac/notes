@@ -30,9 +30,11 @@ const manageNotesSize = (newNoteSize) => {
 };
 
 // home
-app.get("/", (req, res) => {
+const homePage = (req, res) => {
   res.sendFile(path.join(__dirname, "html", "index.html"));
-});
+};
+app.get("/", homePage);
+app.get("/home", homePage);
 
 // make sure noteid does not already exist
 const generateUniqueId = () => {
@@ -43,12 +45,14 @@ const generateUniqueId = () => {
   return noteId;
 };
 
+// rate limiter
 const rateLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 5,
-  message: { error: "too many requests, please try again later." },
+  message: { error: "too many requests, please try again later" },
 });
 
+// note creation endpoint
 app.post("/create-note", rateLimiter, (req, res) => {
   const { encryptedNote } = req.body; // only expect encrypted note
 
@@ -68,14 +72,15 @@ app.post("/create-note", rateLimiter, (req, res) => {
   totalSize += noteSize;
 
   // respond with noteId if successfully stored
-  res.json({ noteId });
+  res.status(200).json({ noteId });
 });
 
+// serve faq page
 app.get("/faq", (req, res) => {
   res.sendFile(path.join(__dirname, "html", "faq.html"));
 });
 
-// view note page
+// serve note page
 app.get("/:noteId", (req, res) => {
   const noteId = req.params.noteId;
 
@@ -87,12 +92,14 @@ app.get("/:noteId", (req, res) => {
   res.sendFile(path.join(__dirname, "html", "note.html"));
 });
 
-// get the actual note
-app.get("/get-note/:noteId", (req, res) => {
+// get note from server
+app.get("/get-note/:noteId", rateLimiter, (req, res) => {
   const noteId = req.params.noteId;
 
   if (!notes[noteId]) {
-    return res.status(404).sendFile(path.join(__dirname, "html", "404.html"));
+    return res.status(404).json({
+      error: "note does not exist",
+    });
   }
 
   // get the note from memory
@@ -103,8 +110,8 @@ app.get("/get-note/:noteId", (req, res) => {
   totalSize -= noteSize; // adjust the total size
   delete notes[noteId];
 
-  // send back the note only
-  res.json({ encryptedNote });
+  // ok send back the note only
+  res.status(200).json({ encryptedNote });
 });
 
 // error handler
@@ -112,12 +119,12 @@ app.use((err, req, res, next) => {
   if (err.type === "entity.too.large") {
     console.error("payload too large:", err);
     return res.status(413).json({
-      error: "payload too large",
+      error: "note too big",
     });
   }
 
   console.error("error:", err);
-  res.status(500).json({ error: "An unexpected error occurred." });
+  res.status(500).json({ error: "an unexpected error occurred" });
 });
 
 // start the server

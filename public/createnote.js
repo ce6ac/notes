@@ -55,16 +55,16 @@ async function encryptNote(noteContent) {
 function displayError(message) {
   const existingError = document.getElementById("error");
   if (existingError) {
-    existingError.remove();
+    existingError.textContent = message;
+  } else {
+    const errorDiv = document.createElement("div");
+    errorDiv.id = "error";
+    errorDiv.className = "error";
+    errorDiv.textContent = message;
+  
+    const titleElement = document.getElementById("title");
+    titleElement.insertAdjacentElement("afterend", errorDiv);
   }
-
-  const errorDiv = document.createElement("div");
-  errorDiv.id = "error";
-  errorDiv.className = "error";
-  errorDiv.textContent = message;
-
-  const titleElement = document.getElementById("title");
-  titleElement.insertAdjacentElement("afterend", errorDiv);
 }
 
 function clearError() {
@@ -76,24 +76,24 @@ function clearError() {
 
 document.addEventListener("DOMContentLoaded", () => {
   const createNoteButton = document.getElementById("create-note-button");
-  const noteInput = document.getElementById("note-input");
+  const noteBox = document.getElementById("note-input");
   const noteControls = document.getElementById("note-link-display");
 
-  noteInput.addEventListener("focus", () => {
+  noteBox.addEventListener("focus", () => {
     clearError();
   });
 
   createNoteButton.addEventListener("click", async () => {
-    const noteContent = noteInput.value;
+    const noteContent = noteBox.value;
     if (!noteContent) {
-      displayError("cannot encrypt nothing...");
+      displayError("note cannot be empty");
       return;
     }
     const result = await encryptNote(noteContent);
 
     // something went wrong in encryption and returned 0
     if (!result) {
-      displayError("something went wrong.");
+      displayError("encryption error");
       return;
     }
 
@@ -108,27 +108,24 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify({ encryptedNote }), // only send encrypted note, not keys
       });
 
+      // handle server side errors
       if (!response.ok) {
         const errorData = await response.json();
-        if (
-          response.status === 413 ||
-          (response.status === 400 && errorData.error === "max size reached")
-        ) {
-          displayError("note size limit reached, try shortening your note.");
-          return;
-        } else {
-          throw new Error("unknown");
-        }
+        displayError(errorData.error);
+        return;
       }
 
+      clearError();
+
+      // modify the page to display note output
       const data = await response.json();
       document.title = "notes - note created";
       const protocol = window.location.protocol;
       const domain = window.location.hostname;
       const port = window.location.port ? ":" + window.location.port : "";
       const noteLink = `${protocol}//${domain}${port}/${data.noteId}#${combinedHex}`;
-      noteInput.style.display = "none";
-      noteInput.value = "";
+      noteBox.style.display = "none";
+      noteBox.value = "";
       noteControls.innerHTML = `
                 <input id="link" type="text" value="${noteLink}" readonly />
                 <button id="copy-link-button">copy</button>
@@ -148,9 +145,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const viewRawButton = document.getElementById("view-raw-button");
       viewRawButton.onclick = () => {
         h1Title.innerHTML = "raw data sent to server";
-        noteInput.style.display = "block";
-        noteInput.value = result.encryptedNote;
-        noteInput.setAttribute("readonly", true);
+        noteBox.style.display = "block";
+        noteBox.value = result.encryptedNote;
+        noteBox.setAttribute("readonly", true);
         viewRawButton.style.display = "none";
       };
 

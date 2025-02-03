@@ -68,6 +68,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       try {
         // get note content
         const response = await fetch(`/get-note/${noteId}`);
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          displayError(errorData.error);
+          return;
+        }
+        console.log("note content has been destroyed");
+
         const { encryptedNote } = await response.json();
 
         // decrypt
@@ -78,12 +86,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         noteContentElement.style.display = "block";
         viewNoteButton.style.display = "none";
       } catch (error) {
-        console.error("error:", error);
-        displayError("failed to get note, bad keys or read already?");
-        location.reload(false);
+        displayError("error decrypting note");
       }
     } else {
-      displayError("this note does not exist, perhaps it's already been read?");
+      displayError("this note does not exist");
     }
   };
 });
