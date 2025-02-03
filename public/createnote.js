@@ -115,6 +115,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
+      console.log("note created")
+
       clearError();
 
       // modify the page to display note output
