@@ -1,6 +1,6 @@
 {
   "name": "notes",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "encrypts messages and stores them in memory until they've been read.",
   "main": "server.js",
   "scripts": {
@@ -15,7 +15,24 @@
     "crypto": "^1.0.1",
     "express": "^4.21.1",
     "express-rate-limit": "^7.4.1",
-    "fs": "^0.0.1-security",
     "path": "^0.12.7"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ce6ac/notes.git"
+  },
+  "keywords": [
+    "notes",
+    "note",
+    "pm",
+    "message",
+    "messages",
+    "encrypted",
+    "encrypt",
+    "encryption"
+  ],
+  "bugs": {
+    "url": "https://github.com/ce6ac/notes/issues"
+  },
+  "homepage": "https://github.com/ce6ac/notes#readme"
 }

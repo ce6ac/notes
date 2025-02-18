@@ -43,16 +43,23 @@ async function decryptNote(encryptedNote, combinedHex) {
 function displayError(message) {
   const existingError = document.getElementById("error");
   if (existingError) {
+    existingError.textContent = message;
+  } else {
+    const errorDiv = document.createElement("div");
+    errorDiv.id = "error";
+    errorDiv.className = "error";
+    errorDiv.textContent = message;
+  
+    const titleElement = document.getElementById("title");
+    titleElement.insertAdjacentElement("afterend", errorDiv);
+  }
+}
+
+function clearError() {
+  const existingError = document.getElementById("error");
+  if (existingError) {
     existingError.remove();
   }
-
-  const errorDiv = document.createElement("div");
-  errorDiv.id = "error";
-  errorDiv.className = "error";
-  errorDiv.textContent = message;
-
-  const titleElement = document.getElementById("title");
-  titleElement.insertAdjacentElement("afterend", errorDiv);
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -74,6 +81,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           displayError(errorData.error);
           return;
         }
+        clearError();
         console.log("note content has been destroyed");
 
         const { encryptedNote } = await response.json();

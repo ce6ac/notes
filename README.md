@@ -24,14 +24,13 @@ since we're storing the encrypted data in memory it means it should never be wri
 git clone https://github.com/ce6ac/notes.git
 
 // install packages
-npm install express body-parser crypto path fs express-rate-limit
+npm install
 
 // run server.js
-node server.js
+node server.js 
+// optionally you can use the following arguments:
+// -mempool <size in bytes> - sets maximum memory utilization for storing notes before they start getting deleted
+// -max <size in bytes> - sets the maximum size a note can be
+//to set the max memory utilization and max note size
 ```
-
-### SSL
-make sure the webserver you're running has an SSL cert and is accessible with https (otherwise crypto package will be angry iirc) (unless running on localhost ofc)
-
-
 

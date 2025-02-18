@@ -2,7 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const crypto = require("crypto");
 const path = require("path");
-const fs = require("fs");
 const app = express();
 const rateLimit = require("express-rate-limit");
 
@@ -11,10 +10,27 @@ const PORT = 3000;
 app.use(bodyParser.json({ limit: "1.01mb" }));
 app.use(express.static("public"));
 
+const args = process.argv;
+
+// default
+let maxTotalSize = 80 * 1024 * 1024;
+let maxNoteSize = 1 * 1024 * 1024;
+
+// custom values
+for (let i = 2; i < args.length; i++) {
+  if (args[i] === "-mempool" && args[i + 1]) {
+    maxTotalSize = parseInt(args[i + 1]) * 1024 * 1024;
+    i++;
+  }
+
+  if (args[i] === "-max" && args[i + 1]) {
+    maxNoteSize = parseInt(args[i + 1]);
+    i++;
+  }
+}
+
 // in memory
 const notes = {};
-let maxTotalSize = 80 * 1024 * 1024; // 80mb
-let maxNoteSize = 1 * 1024 * 1024; // 1mb
 let totalSize = 0; // track the total size of all notes
 
 const manageNotesSize = (newNoteSize) => {
@@ -48,7 +64,7 @@ const generateUniqueId = () => {
 // rate limiter
 const rateLimiter = rateLimit({
   windowMs: 60 * 1000,
-  max: 5,
+  max: 10,
   message: { error: "too many requests, please try again later" },
 });
 
@@ -130,4 +146,6 @@ app.use((err, req, res, next) => {
 // start the server
 app.listen(PORT, "127.0.0.1", () => {
   console.log(`running on port ${PORT}`);
+  console.log(`mempool size: ${maxTotalSize} bytes or ${maxTotalSize / 1024 / 1024} mb`);
+  console.log(`max note size: ${maxNoteSize} bytes or ${maxNoteSize / 1024 / 1024} mb`);
 });
