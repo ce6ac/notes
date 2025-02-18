@@ -19,7 +19,7 @@ let maxNoteSize = 1 * 1024 * 1024;
 // custom values
 for (let i = 2; i < args.length; i++) {
   if (args[i] === "-mempool" && args[i + 1]) {
-    maxTotalSize = parseInt(args[i + 1]) * 1024 * 1024;
+    maxTotalSize = parseInt(args[i + 1]);
     i++;
   }
 
