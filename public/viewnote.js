@@ -7,9 +7,8 @@ async function decryptNote(encryptedNote, combinedHex) {
   const ivHex = combinedHex.slice(keyLength * 2, (keyLength + ivLength) * 2);
 
   // get key from hex
-  const keyBuffer = new Uint8Array(
-    keyHex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
-  );
+  const keyBuffer = new Uint8Array(keyHex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
+
   const key = await window.crypto.subtle.importKey(
     "raw",
     keyBuffer,
@@ -20,12 +19,8 @@ async function decryptNote(encryptedNote, combinedHex) {
     ["decrypt"]
   );
 
-  const ivBuffer = new Uint8Array(
-    ivHex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
-  );
-  const encryptedArray = Uint8Array.from(atob(encryptedNote), (c) =>
-    c.charCodeAt(0)
-  );
+  const ivBuffer = new Uint8Array(ivHex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
+  const encryptedArray = Uint8Array.from(atob(encryptedNote), (c) => c.charCodeAt(0));
   const decryptedData = await window.crypto.subtle.decrypt(
     {
       name: "AES-GCM",
@@ -66,6 +61,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const hash = window.location.hash.substring(1);
   const noteId = window.location.pathname.split("/").pop();
   const combinedHex = hash.split("#")[0];
+
+  history.replaceState(null, "", "/"); // hide data stored in url
 
   document.getElementById("view-note-button").onclick = async () => {
     const noteContentElement = document.getElementById("note-content");
