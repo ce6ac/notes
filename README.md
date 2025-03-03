@@ -28,9 +28,9 @@ npm install
 
 // run server.js
 node server.js 
+
 // optionally you can use the following arguments:
 // -mempool <size in bytes> - sets maximum memory utilization for storing notes before they start getting deleted
 // -max <size in bytes> - sets the maximum size a note can be
-//to set the max memory utilization and max note size
 ```
 
