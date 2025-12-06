@@ -84,22 +84,26 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   createNoteButton.addEventListener("click", async () => {
-    const noteContent = noteBox.value;
-    if (!noteContent) {
-      displayError("note cannot be empty");
-      return;
-    }
-    const result = await encryptNote(noteContent);
-
-    // something went wrong in encryption and returned 0
-    if (!result) {
-      displayError("encryption error");
-      return;
-    }
-
-    const { encryptedNote, combinedHex } = result;
+    if (createNoteButton.disabled) return;
+    createNoteButton.disabled = true;
 
     try {
+      const noteContent = noteBox.value;
+      if (!noteContent) {
+        displayError("note cannot be empty");
+        return;
+      }
+
+      const result = await encryptNote(noteContent);
+
+      // something went wrong in encryption and returned 0
+      if (!result) {
+        displayError("encryption error");
+        return;
+      }
+
+      const { encryptedNote, combinedHex } = result;
+
       const response = await fetch("/create-note", {
         method: "POST",
         headers: {
@@ -115,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      console.log("note created")
+      console.log("note created");
 
       clearError();
 
@@ -160,6 +164,8 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
       console.error(error);
       displayError("failed to create note. please try again.");
+    } finally {
+      createNoteButton.disabled = false;
     }
   });
 });
