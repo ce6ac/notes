@@ -15,16 +15,21 @@ const args = process.argv;
 // default
 let maxTotalSize = 80 * 1024 * 1024;
 let maxNoteSize = 1 * 1024 * 1024;
+let maxReqs = 5;
 
 // custom values
 for (let i = 2; i < args.length; i++) {
   if (args[i] === "-mempool" && args[i + 1]) {
-    maxTotalSize = parseInt(args[i + 1]);
+    const parsed = parseInt(args[i + 1]);
+    if (!isNaN(parsed) && parsed > 0) maxTotalSize = parsed;
     i++;
-  }
-
-  if (args[i] === "-max" && args[i + 1]) {
-    maxNoteSize = parseInt(args[i + 1]);
+  } else if (args[i] === "-max" && args[i + 1]) {
+    const parsed = parseInt(args[i + 1]);
+    if (!isNaN(parsed) && parsed > 0) maxNoteSize = parsed;
+    i++;
+  } else if (args[i] === "-ratelimit" && args[i + 1]) {
+    const parsed = parseInt(args[i + 1]);
+    if (!isNaN(parsed) && parsed > 0) maxReqs = parsed;
     i++;
   }
 }
@@ -64,7 +69,7 @@ const generateUniqueId = () => {
 // rate limiter
 const rateLimiter = rateLimit({
   windowMs: 60 * 1000,
-  max: 10,
+  max: maxReqs,
   message: { error: "too many requests, please try again later" },
 });
 
@@ -148,4 +153,5 @@ app.listen(PORT, "127.0.0.1", () => {
   console.log(`running on port ${PORT}`);
   console.log(`mempool size: ${maxTotalSize} bytes or ${maxTotalSize / 1024 / 1024} mb`);
   console.log(`max note size: ${maxNoteSize} bytes or ${maxNoteSize / 1024 / 1024} mb`);
+  console.log(`max reqs (rl): ${maxReqs} per minute`);
 });
